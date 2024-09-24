@@ -84,3 +84,9 @@ as the destination and upload the page as an `.url` file.
 
 Then the watcher watching the NextCloud data subdirectory produces the `.mobi`
 and `.epub` files that can be synced to the e-reader.
+
+## Credits
+
+I got the original idea and inspiration from a blog post featured on HackerNews:
+
+https://olano.dev/blog/from-rss-to-my-kindle/
