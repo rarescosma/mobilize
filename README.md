@@ -24,10 +24,17 @@ Clone the repo:
 $ git clone https://github.com/rarescosma/mobilize.git
 ```
 
-Build the docker image
+Build the docker image:
 
 ```shell
 $ just dockerize
+```
+
+_NOTE:_ you can now use a pre-built docker image from `ghcr.io` if you
+want to avoid the local build. Instead of the `just dockerize` command use:
+
+```shell
+$ just pull_ghcr
 ```
 
 ## Usage
@@ -54,7 +61,7 @@ $ just watch_dir /absolute/path/to/dir
 ```
 
 By default the output will be produced in the same directory, but you can also
-specify a different output directory.
+specify a different output directory:
 
 ```shell
 $ just watch_dir /absolute/path/to/watched_dir /absolute/path/to/output_dir
@@ -75,4 +82,5 @@ NextCloud. Whenever I don't want to wreck my eyes reading long-form articles
 on the phone, I click the "Share" button in Firefox Android, select NextCloud
 as the destination and upload the page as an `.url` file.
 
-Then I have this thing running the watcher on the NextCloud data subdirectory.
+Then the watcher watching the NextCloud data subdirectory produces the `.mobi`
+and `.epub` files that can be synced to the e-reader.
