@@ -5,11 +5,11 @@
 #
 # Removing `/usr/lib/python3.12/EXTERNALLY-MANAGED` and installing
 # python packages as root feels a bit hacky and cursed, but we
-# couldn't be bother with virtualenvs.
+# couldn't be bothered with the virtual environment dance.
 #
 # We're also manually nuking a Qt6 library that appears unused by
 # the `ebook-convert` utility, just to dampen the hit of calibre
-# barfing a 900M layer into the this image.
+# barfing a 900M layer into the image.
 ARG HUB=docker.io
 FROM ${HUB}/library/alpine:20240807
 
