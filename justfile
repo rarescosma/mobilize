@@ -1,19 +1,18 @@
-HUB := "hub.getbetter.ro"
-#HUB := "docker.io"
+HUB := "docker.io"
 DEFAULT_WORKDIR := `pwd` + "/workdir"
 DOCKER := "docker run -it --rm --user " + `id -u` + ":" + `id -g`
 
 _default:
   @just --list
 
+# pull image from ghcr.io
+pull_ghcr:
+    docker pull ghcr.io/rarescosma/mobilize:$(just _version)
+    docker tag ghcr.io/rarescosma/mobilize:$(just _version) mobilize:$(just _tag)
+
 # build the docker image
 dockerize:
     docker build -f docker/Dockerfile . -t mobilize:$(just _tag)
-
-# publish the docker image to a private registry
-push_latest:
-    docker tag mobilize:$(just _tag) {{HUB}}/mobilize:latest
-    docker push {{HUB}}/mobilize:latest
 
 # convert a single URL to epub+mobi
 convert_url url workdir=DEFAULT_WORKDIR:
@@ -32,11 +31,21 @@ watch_dir watchdir outdir="":
       -e OUT_DIR="/outdir" -v "$outdir":/outdir \
       mobilize:$(just _tag)
 
+_version:
+    #!/usr/bin/env bash
+    py_version="$(grep "version=" setup.py | grep -oE "[0-9\.]+")"
+    printf "v%s" $py_version
+
 # hash important files to make a project tag
 _tag:
-  #!/usr/bin/env bash
-  git ls-files -s \
-    docker package.json package-lock.json extract_article.js \
-    requirements.txt setup.py mobilize watcher.sh \
-    | git hash-object --stdin \
-    | cut -c-20
+    #!/usr/bin/env bash
+    git ls-files -s \
+      docker package.json package-lock.json extract_article.js \
+      requirements.txt setup.py mobilize watcher.sh \
+        | git hash-object --stdin \
+        | cut -c-20
+
+# publish the docker image to a private registry
+_push_private:
+    docker tag mobilize:$(just _tag) {{HUB}}/mobilize:latest
+    docker push {{HUB}}/mobilize:latest
