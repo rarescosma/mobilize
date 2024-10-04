@@ -92,9 +92,7 @@ def _slugify(value: str) -> str:
 
     Source: https://github.com/django/django/blob/stable/5.1.x/django/utils/text.py#L452
     """
-    value = (
-        unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
-    )
+    value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
     value = re.sub(r"[^\w\s-]", "", value.lower())
     return re.sub(r"[-\s]+", "-", value).strip("-_")
 

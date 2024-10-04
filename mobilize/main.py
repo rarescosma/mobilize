@@ -39,7 +39,8 @@ def extract_article(url: str) -> Optional[Article]:
         parsed["url"] = url
     except JSONDecodeError as e:
         print(
-            f"could not parse extract_article JSON err={e}, out={out.stdout}, err={out.stderr}"
+            f"could not parse extract_article JSON err={e!r}, "
+            f"out={out.stdout!r}, err={out.stderr!r}"
         )
         return None
 
@@ -62,9 +63,7 @@ def package_epub(article: Article, images: Iterable[Image]) -> bytes:
 
 def convert_to_mobi(epub_f: Path, mobi_f: Path) -> bool:
     try:
-        check_output(
-            ["ebook-convert", str(epub_f), str(mobi_f)], env={"PYTHONPATH": ""}
-        )
+        check_output(["ebook-convert", str(epub_f), str(mobi_f)], env={"PYTHONPATH": ""})
     except CalledProcessError:
         return False
     return True

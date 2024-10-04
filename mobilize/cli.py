@@ -73,9 +73,5 @@ def _usage() -> str:
 
 def _parse_url_file(url_f: Path) -> Optional[str]:
     with suppress(Exception):
-        return next(
-            _.split("=")[1]
-            for _ in url_f.read_text().splitlines()
-            if _.startswith("URL")
-        )
+        return next(_.split("=")[1] for _ in url_f.read_text().splitlines() if _.startswith("URL"))
     return None
