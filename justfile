@@ -31,6 +31,10 @@ watch_dir watchdir outdir="":
       -e OUT_DIR="/outdir" -v "$outdir":/outdir \
       mobilize:$(just _tag)
 
+# bump the module version
+bump_version part="patch":
+    bumpversion patch --verbose setup.py --commit --sign-tags --tag
+
 _version:
     #!/usr/bin/env bash
     py_version="$(grep "version=" setup.py | grep -oE "[0-9\.]+")"
