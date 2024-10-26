@@ -85,10 +85,10 @@ def main() -> int:
 
         try:
             article = prepend_source_url(article, _article_url)
-            article, imgs = process_images(article)
+            article, images = process_images(article)
 
             epub_f = epub_dir / f"{make_filename(article)}.epub"
-            epub_f.write_bytes(package_epub(article, imgs))
+            epub_f.write_bytes(package_epub(article, images))
             print(f"done url={_article_url}, epub={epub_f.absolute()}")
 
             mobi_f = mobi_dir / epub_f.with_suffix(".mobi").name
