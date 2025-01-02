@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="mobilize",
-    version="0.1.3",
+    version="0.1.4",
     description="http URL to epub + mobi converter",
     entry_points={
         "console_scripts": ["mobilize=mobilize.main:main"],
