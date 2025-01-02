@@ -1,3 +1,4 @@
+import sys
 from copy import deepcopy
 from multiprocessing import cpu_count
 from multiprocessing.dummy import Pool
@@ -49,7 +50,15 @@ def process_images(article: Article) -> Tuple[Article, Iterable[Image]]:
 
 def _process_image(url: str) -> Optional[Image]:
     img_filename = "article_files/" + url.split("/")[-1].split("?")[0]
-    response = requests.get(url, timeout=10)
+    try:
+        response = requests.get(url, timeout=10)
+    except requests.exceptions.Timeout:
+        return None
+    except requests.exceptions.TooManyRedirects:
+        return None
+    except requests.exceptions.RequestException as e:
+        print(f"warn: encountered {e} while processing {url}", file=sys.stderr)
+        return None
 
     if not response.ok:
         return None
