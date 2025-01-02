@@ -54,14 +54,15 @@ def make_filename(article: Article) -> str:
     return f"{_short_date()}_{_slugify(article['title'])}"
 
 
-def prepend_source_url(article: Article, url: str) -> Article:
-    """Prepend a paragraph with the source URL to the article. It's nice."""
+def prepend_metadata(article: Article, url: str, mobi_file: str) -> Article:
+    """Prepend a paragraph with metadata to the article. It's nice."""
     soup = BeautifulSoup(article["content"], "lxml")
 
     first_div = soup.find("div")
     if not first_div:
         return article
 
+    # URL
     b = soup.new_tag("b")
     b.string = "Source: "
     a = soup.new_tag("a", href=url, target="_blank")
@@ -70,6 +71,16 @@ def prepend_source_url(article: Article, url: str) -> Article:
     p = soup.new_tag("p")
     p.append(b)
     p.append(a)
+
+    first_div.insert(0, p)
+
+    # Mobi file
+    b, s = soup.new_tag("b"), soup.new_string(mobi_file)
+    b.string = "File: "
+
+    p = soup.new_tag("p")
+    p.append(b)
+    p.append(s)
 
     first_div.insert(0, p)
 

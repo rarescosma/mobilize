@@ -18,7 +18,7 @@ from typing import Iterable, Optional
 from .cli import Opts
 from .img import process_images
 from .model import Article, Image
-from .tpl import container_xml, content_opf, make_filename, prepend_source_url
+from .tpl import container_xml, content_opf, make_filename, prepend_metadata
 
 DOT: str = os.path.dirname(os.path.abspath(os.path.realpath(__file__)))
 
@@ -84,14 +84,16 @@ def main() -> int:
             return
 
         try:
-            article = prepend_source_url(article, _article_url)
+            f_name = make_filename(article)
+            epub_f = epub_dir / f"{f_name}.epub"
+            mobi_f = mobi_dir / epub_f.with_suffix(".mobi").name
+
+            article = prepend_metadata(article, _article_url, f_name)
             article, images = process_images(article)
 
-            epub_f = epub_dir / f"{make_filename(article)}.epub"
             epub_f.write_bytes(package_epub(article, images))
             print(f"done url={_article_url}, epub={epub_f.absolute()}")
 
-            mobi_f = mobi_dir / epub_f.with_suffix(".mobi").name
             if convert_to_mobi(epub_f, mobi_f):
                 print(f"done url={_article_url}, mobi={mobi_f.absolute()}")
             else:
